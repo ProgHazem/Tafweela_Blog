@@ -1,0 +1,18 @@
+{
+  "userName": {
+    "required": "UserName Required"
+  },
+  "email": {
+    "required": "Email Required",
+    "email": "Email is invalid",
+    "unique": "Email is Already register"
+  },
+  "password": {
+    "required": "Password Required",
+    "confirmed": "Password must be identical",
+    "regex": "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+  },
+  "refreshToken": {
+    "required": "Refresh Token Required"
+  }
+}

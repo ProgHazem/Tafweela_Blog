@@ -1,0 +1,8 @@
+{
+  "E_VALIDATION_ERROR": "E_VALIDATION_ERROR",
+  "E_NOT_FOUND": "E_NOT_FOUND",
+  "E_INVALID_DATA": "E_INVALID_DATA",
+  "resource_Not_found": "Resource Not Found",
+  "Credentials_Invalid": "Credentials Invalid",
+  "Invalid_Refresh_Token": "Invalid Refresh Token"
+}
