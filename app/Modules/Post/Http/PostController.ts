@@ -7,7 +7,6 @@ import ResourceNotFoundException from 'App/Exceptions/ResourceNotFoundException'
 import ErrorException from 'App/Exceptions/ErrorException'
 import { ErrorClass } from 'App/Modules/Sheard/Classes/error.class'
 import { ValidationException } from '@adonisjs/validator/build/src/ValidationException'
-import Application from '@ioc:Adonis/Core/Application'
 
 @inject()
 export default class PostController {
