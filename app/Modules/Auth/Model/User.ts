@@ -1,12 +1,14 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Post from 'App/Modules/Post/Model/Post'
+import AppBaseModel from 'App/Models/AppBaseModel'
 
-export default class User extends BaseModel {
+export default class User extends AppBaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: 'userName' })
   public userName: string
 
   @column()
@@ -31,4 +33,6 @@ export default class User extends BaseModel {
     }
   }
 
+  @hasMany(() => Post)
+  public posts: HasMany<typeof Post>
 }

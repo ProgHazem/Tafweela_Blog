@@ -7,7 +7,6 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import ErrorException from 'App/Exceptions/ErrorException'
 import { inject } from '@adonisjs/fold'
 import Database from '@ioc:Adonis/Lucid/Database'
-
 @inject()
 export default class AuthService {
   constructor(private authRepository: AuthRepository) {}
