@@ -121,6 +121,12 @@ test('display welcome page', async ({ client }) => {
   response.assertStatus(200)
 })`
       )
+      // File route
+      fs.writeFileSync(
+        `./app/Modules/${string.capitalCase(this.name)}/${string.snakeCase(this.name)}.routes.ts`,
+        `import Route from '@ioc:Adonis/Core/Route'
+Route.group(() => {})`
+      )
     }
   }
 }
