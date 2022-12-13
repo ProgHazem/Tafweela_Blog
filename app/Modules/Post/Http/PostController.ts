@@ -7,6 +7,7 @@ import ResourceNotFoundException from 'App/Exceptions/ResourceNotFoundException'
 import ErrorException from 'App/Exceptions/ErrorException'
 import { ErrorClass } from 'App/Modules/Sheard/Classes/error.class'
 import { ValidationException } from '@adonisjs/validator/build/src/ValidationException'
+import UnAuthorizedException from 'App/Exceptions/UnAuthorizedException'
 
 @inject()
 export default class PostController {
@@ -14,9 +15,9 @@ export default class PostController {
 
   constructor(private postService: PostService) {}
 
-  public async getAllPosts({ request, i18n, response }: HttpContextContract) {
+  public async getAllPosts({ request, i18n, response, params }: HttpContextContract) {
     try {
-      const posts = await this.postService.getAllPosts()
+      const posts = await this.postService.getAllPosts(params?.page, params?.perPage)
       return new SuccessClass(posts)
     } catch (error) {
       if (error instanceof ResourceNotFoundException || error instanceof ErrorException) {
@@ -54,10 +55,10 @@ export default class PostController {
           this.errorValidation.push(error.message)
         )
         return response
-          .status(400)
+          .status(error.status)
           .send(
             new ErrorClass(
-              400,
+              error.status,
               this.errorValidation,
               i18n.formatMessage('exceptions.general.E_VALIDATION_ERROR'),
               request.url()
@@ -86,10 +87,10 @@ export default class PostController {
           this.errorValidation.push(error.message)
         )
         return response
-          .status(400)
+          .status(error.status)
           .send(
             new ErrorClass(
-              400,
+              error.status,
               this.errorValidation,
               i18n.formatMessage('exceptions.general.E_VALIDATION_ERROR'),
               request.url()
@@ -98,13 +99,22 @@ export default class PostController {
       }
     }
   }
-  public async updatePost({ params, request, i18n, response, auth }: HttpContextContract) {
+  public async updatePost({ params, request, i18n, response, bouncer }: HttpContextContract) {
     try {
-      const payloads = await request.validate(BlogUpdateValidator)
-      const post = await this.postService.updatePost(params.id, payloads)
+      const payloads: any = await request.validate(BlogUpdateValidator)
+      let updatedPayload = { ...payloads }
+      if (payloads.cover) {
+        await payloads.cover.moveToDisk('./posts')
+        updatedPayload = { ...updatedPayload, cover: payloads.cover.fileName }
+      }
+      const post = await this.postService.updatePost(params.id, updatedPayload, bouncer, i18n)
       return new SuccessClass(post)
     } catch (error) {
-      if (error instanceof ResourceNotFoundException || error instanceof ErrorException) {
+      if (
+        error instanceof ResourceNotFoundException ||
+        error instanceof ErrorException ||
+        error instanceof UnAuthorizedException
+      ) {
         return response
           .status(error.status)
           .send(new ErrorClass(error.status, error.message, error.code, request.url()))
@@ -125,12 +135,16 @@ export default class PostController {
       }
     }
   }
-  public async deletePost({ params, request, i18n, response }: HttpContextContract) {
+  public async deletePost({ params, request, i18n, response, bouncer }: HttpContextContract) {
     try {
-      const post = await this.postService.deletePost(params.id)
+      const post = await this.postService.deletePost(params.id, bouncer, i18n)
       return new SuccessClass(post)
     } catch (error) {
-      if (error instanceof ResourceNotFoundException || error instanceof ErrorException) {
+      if (
+        error instanceof ResourceNotFoundException ||
+        error instanceof ErrorException ||
+        error instanceof UnAuthorizedException
+      ) {
         return response
           .status(error.status)
           .send(new ErrorClass(error.status, error.message, error.code, request.url()))

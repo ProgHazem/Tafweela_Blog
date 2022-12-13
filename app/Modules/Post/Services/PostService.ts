@@ -1,18 +1,18 @@
 import { inject } from '@adonisjs/fold'
 import PostRepository from 'App/Modules/Post/Repository/PostRepository'
-import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { BodyBlog, BodyUpdateBlog } from 'App/Modules/Post/Types'
 import ResourceNotFoundException from 'App/Exceptions/ResourceNotFoundException'
 import { I18nContract } from '@ioc:Adonis/Addons/I18n'
-// import ErrorException from 'App/Exceptions/ErrorException'
-// import Database from '@ioc:Adonis/Lucid/Database'
+import { ActionsAuthorizerContract } from '@ioc:Adonis/Addons/Bouncer'
+import User from 'App/Modules/Auth/Model/User'
+import UnAuthorizedException from 'App/Exceptions/UnAuthorizedException'
 
 @inject()
 export default class PostService {
   constructor(private postRepository: PostRepository) {}
-  public async getAllPosts() {
+  public async getAllPosts(page = 1, perPage = 25) {
     try {
-      const posts = await this.postRepository.getAll()
+      const posts = await this.postRepository.getAll(page, perPage)
       console.log('posts', posts)
       return { posts }
     } catch (error) {
@@ -42,18 +42,53 @@ export default class PostService {
       throw error
     }
   }
-  public async updatePost(id: number, bodyUpdateBlog: BodyUpdateBlog) {
+  public async updatePost(
+    id: number,
+    bodyUpdateBlog: BodyUpdateBlog,
+    bouncer: ActionsAuthorizerContract<User>,
+    i18n: I18nContract
+  ) {
     try {
-      const post = await this.postRepository.update(id, { ...bodyUpdateBlog })
-      return { post }
+      const post = await this.postRepository.findOne(id)
+      if (post) {
+        if (await bouncer.denies('updatePost', post)) {
+          throw new UnAuthorizedException(
+            i18n.formatMessage('exceptions.general.E_UNAUTHORIZED'),
+            403,
+            i18n.formatMessage('exceptions.general.E_UNAUTHORIZED')
+          )
+        }
+        const updatedPost = await this.postRepository.update(post, bodyUpdateBlog)
+        return { post: updatedPost }
+      }
     } catch (error) {
       throw error
     }
   }
-  public async deletePost(id: number) {
+  public async deletePost(
+    id: number,
+    bouncer: ActionsAuthorizerContract<User>,
+    i18n: I18nContract
+  ) {
     try {
-      const post = await this.postRepository.delete(id)
-      return { post }
+      const post = await this.postRepository.findOne(id)
+      if (post) {
+        if (await bouncer.denies('updatePost', post)) {
+          throw new UnAuthorizedException(
+            i18n.formatMessage('exceptions.general.E_UNAUTHORIZED'),
+            403,
+            i18n.formatMessage('exceptions.general.E_UNAUTHORIZED')
+          )
+        }
+        const deletedPost = await this.postRepository.delete(post)
+        return { post: deletedPost }
+      } else {
+        throw new ResourceNotFoundException(
+          i18n.formatMessage('exceptions.general.E_ROW_NOT_FOUND'),
+          400,
+          i18n.formatMessage('exceptions.general.E_ROW_NOT_FOUND')
+        )
+      }
     } catch (error) {
       throw error
     }

@@ -7,6 +7,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import ErrorException from 'App/Exceptions/ErrorException'
 import { inject } from '@adonisjs/fold'
 import Database from '@ioc:Adonis/Lucid/Database'
+import HttpStatusCode from 'App/Modules/Sheard/Enums/http-status-code.enum'
 @inject()
 export default class AuthService {
   constructor(private authRepository: AuthRepository) {}
@@ -25,14 +26,14 @@ export default class AuthService {
       if (!user) {
         throw new ResourceNotFoundException(
           i18n.formatMessage('exceptions.general.resource_Not_found'),
-          400,
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
           i18n.formatMessage('exceptions.general.E_NOT_FOUND')
         )
       }
       if (!(await Hash.verify(user.password, bodyLogin.password))) {
         throw new ErrorException(
           i18n.formatMessage('exceptions.general.Credentials_Invalid'),
-          400,
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
           i18n.formatMessage('exceptions.general.E_INVALID_DATA')
         )
       }
@@ -55,7 +56,7 @@ export default class AuthService {
       if (!existRefreshToken) {
         throw new ResourceNotFoundException(
           i18n.formatMessage('exceptions.general.Invalid_Refresh_Token'),
-          400,
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
           i18n.formatMessage('exceptions.general.E_NOT_FOUND')
         )
       }

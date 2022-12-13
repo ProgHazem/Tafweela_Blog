@@ -26,10 +26,10 @@ export default class AuthController {
           this.errorValidation.push(error.message)
         )
         return response
-          .status(400)
+          .status(error.status)
           .send(
             new ErrorClass(
-              400,
+              error.status,
               this.errorValidation,
               i18n.formatMessage('exceptions.general.E_VALIDATION_ERROR'),
               request.url()
@@ -53,10 +53,10 @@ export default class AuthController {
           this.errorValidation.push(error.message)
         )
         return response
-          .status(400)
+          .status(error.status)
           .send(
             new ErrorClass(
-              400,
+              error.status,
               this.errorValidation,
               i18n.formatMessage('exceptions.general.E_VALIDATION_ERROR'),
               request.url()
@@ -80,10 +80,10 @@ export default class AuthController {
           this.errorValidation.push(error.message)
         )
         return response
-          .status(400)
+          .status(error.status)
           .send(
             new ErrorClass(
-              400,
+              error.status,
               this.errorValidation,
               i18n.formatMessage('exceptions.general.E_VALIDATION_ERROR'),
               request.url()
@@ -102,10 +102,10 @@ export default class AuthController {
           this.errorValidation.push(error.message)
         )
         return response
-          .status(400)
+          .status(error.status)
           .send(
             new ErrorClass(
-              400,
+              error.status,
               this.errorValidation,
               i18n.formatMessage('exceptions.E_VALIDATION_ERROR'),
               request.url()
