@@ -13,7 +13,6 @@ export default class PostService {
   public async getAllPosts(page = 1, perPage = 25) {
     try {
       const posts = await this.postRepository.getAll(page, perPage)
-      console.log('posts', posts)
       return { posts }
     } catch (error) {
       throw error

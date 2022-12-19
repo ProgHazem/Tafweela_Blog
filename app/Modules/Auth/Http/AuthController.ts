@@ -18,7 +18,7 @@ export default class AuthController {
   public async register({ request, auth, response, i18n }: HttpContextContract): Promise<any> {
     try {
       const payload = await request.validate(RegisterValidator)
-      const result = await this.authService.register(payload, auth)
+      const result = await this.authService.register({ ...payload, roleId: 2 }, auth)
       return new SuccessClass(result)
     } catch (error) {
       if (error instanceof ValidationException) {

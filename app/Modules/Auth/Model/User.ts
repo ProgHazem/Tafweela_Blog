@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, HasMany, hasMany, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Post from 'App/Modules/Post/Model/Post'
 import AppBaseModel from 'App/Models/AppBaseModel'
+import Role from 'App/Modules/Role/Model/Role'
 
 export default class User extends AppBaseModel {
   @column({ isPrimary: true })
@@ -20,6 +21,12 @@ export default class User extends AppBaseModel {
   @column()
   public rememberMeToken: string | null
 
+  @column()
+  public roleId: number
+
+  @column.dateTime()
+  public deletedAt?: DateTime | null
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -35,4 +42,7 @@ export default class User extends AppBaseModel {
 
   @hasMany(() => Post)
   public posts: HasMany<typeof Post>
+
+  @belongsTo(() => Role)
+  public role: BelongsTo<typeof Role>
 }

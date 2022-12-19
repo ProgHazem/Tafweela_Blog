@@ -9,10 +9,10 @@ Route.group(() => {
   Route.get('/', 'PostController.getAllPosts')
   Route.get('/:id', 'PostController.getOnePost')
   Route.group(() => {
-    Route.post('/create', 'PostController.createPost')
+    Route.post('/', 'PostController.createPost')
     Route.put('/:id', 'PostController.updatePost')
     Route.delete('/:id', 'PostController.deletePost')
-  }).middleware('auth')
+  }).middleware(['auth', 'role:admin,creator'])
 })
   .namespace('App/Modules/Post/Http')
   .prefix('api/v1/posts')

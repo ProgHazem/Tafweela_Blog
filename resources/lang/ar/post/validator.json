@@ -1,0 +1,16 @@
+{
+  "title": {
+    "required": "Title Required",
+    "minLength": "Title Min Character 10",
+    "maxLength": "Title Max Character 100"
+  },
+  "body": {
+    "required": "Body Required",
+    "minLength": "Body Min Character 10"
+  },
+  "cover": {
+    "required": "Cover Required",
+    "size": "Cover File Must be 2mb",
+    "extname": "Cover File Extension Must be .png or .jpg"
+  }
+}

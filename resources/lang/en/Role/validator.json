@@ -1,0 +1,10 @@
+{
+  "nameEn": {
+    "required": "Role English Name Required",
+    "regex": "Role English Name Must be English Character"
+  },
+  "nameAr": {
+    "required": "Role Arabic Name Required",
+    "regex": "Role Arabic Name Must be Arabic Character"
+  }
+}

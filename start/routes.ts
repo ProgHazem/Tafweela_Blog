@@ -3,6 +3,7 @@ import Application from '@ioc:Adonis/Core/Application'
 
 import 'App/Modules/Auth/auth.routes'
 import 'App/Modules/Post/post.routes'
+import 'App/Modules/Role/role.routes'
 
 Route.get('/', async () => {
   Application.logger.info(Application.nodeEnvironment!.toString())

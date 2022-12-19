@@ -22,6 +22,9 @@ export default class Post extends AppBaseModel {
   @column()
   public userId: number
 
+  @column.dateTime()
+  public deletedAt?: DateTime | null
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
