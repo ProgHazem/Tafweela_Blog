@@ -3,14 +3,15 @@ import RoleRepository from 'App/Modules/Role/Repository/RoleRepository'
 import { I18nContract } from '@ioc:Adonis/Addons/I18n'
 import ResourceNotFoundException from 'App/Exceptions/ResourceNotFoundException'
 import BodyRole from 'App/Modules/Role/Types/BodyRole'
+import RoleResource from 'App/Modules/Role/Resources/RoleResource'
 @inject()
 export default class RoleService {
   constructor(private roleRepository: RoleRepository) {}
 
-  public async getAllRoles(page = 1, perPage = 25) {
+  public async getAllRoles(page = 1, perPage = 25, i18n: I18nContract) {
     try {
       const roles = await this.roleRepository.getAll(page, perPage)
-      return { roles }
+      return new RoleResource().collection(roles, i18n.locale)
     } catch (error) {
       throw error
     }
@@ -25,7 +26,7 @@ export default class RoleService {
           i18n.formatMessage('exceptions.general.E_NOT_FOUND')
         )
       }
-      return { role }
+      return new RoleResource().resource(role, i18n.locale)
     } catch (error) {
       throw error
     }

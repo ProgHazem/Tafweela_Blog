@@ -11,6 +11,10 @@ export default class AuthRepository implements AuthRepositoryContract {
     return await this.model.create(data)
   }
   public async findOne(email): Promise<User | null> {
-    return await this.model.findBy('email', email)
+    return await this.model
+      .query()
+      .preload('role')
+      .whereILike('email', `${String(email)}`)
+      .first()
   }
 }

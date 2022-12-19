@@ -8,6 +8,7 @@ import ErrorException from 'App/Exceptions/ErrorException'
 import { inject } from '@adonisjs/fold'
 import Database from '@ioc:Adonis/Lucid/Database'
 import HttpStatusCode from 'App/Modules/Sheard/Enums/http-status-code.enum'
+import UserResource from 'App/Modules/Auth/Resources/UserResource'
 @inject()
 export default class AuthService {
   constructor(private authRepository: AuthRepository) {}
@@ -15,7 +16,7 @@ export default class AuthService {
     try {
       const user = await this.authRepository.create(bodyRegister)
       const token = await auth.use('jwt').generate(user)
-      return { user, token }
+      return new UserResource().resource(user, token)
     } catch (error) {
       throw error
     }
@@ -38,7 +39,7 @@ export default class AuthService {
         )
       }
       const token = await auth.use('jwt').generate(user)
-      return { user, token }
+      return new UserResource().resource(user, token, i18n.locale)
     } catch (error) {
       throw error
     }

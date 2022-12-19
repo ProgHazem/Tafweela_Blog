@@ -15,7 +15,7 @@ export default class RoleController {
   constructor(private roleService: RoleService) {}
   public async index({ request, response, i18n, params }: HttpContextContract) {
     try {
-      const roles = await this.roleService.getAllRoles(params?.page, params?.perPage)
+      const roles = await this.roleService.getAllRoles(params?.page, params?.perPage, i18n)
       return new SuccessClass(roles)
     } catch (error) {
       if (error instanceof ResourceNotFoundException || error instanceof ErrorException) {

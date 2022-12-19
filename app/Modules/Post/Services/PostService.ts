@@ -6,15 +6,17 @@ import { I18nContract } from '@ioc:Adonis/Addons/I18n'
 import { ActionsAuthorizerContract } from '@ioc:Adonis/Addons/Bouncer'
 import User from 'App/Modules/Auth/Model/User'
 import UnAuthorizedException from 'App/Exceptions/UnAuthorizedException'
+import PostResource from 'App/Modules/Post/Resources/PostResource'
 
 @inject()
 export default class PostService {
   constructor(private postRepository: PostRepository) {}
-  public async getAllPosts(page = 1, perPage = 25) {
+  public async getAllPosts(page = 1, perPage = 25, i18n: I18nContract) {
     try {
       const posts = await this.postRepository.getAll(page, perPage)
-      return { posts }
+      return new PostResource().collection(posts, i18n.locale)
     } catch (error) {
+      console.log(error)
       throw error
     }
   }
@@ -28,7 +30,7 @@ export default class PostService {
           i18n.formatMessage('exceptions.general.E_NOT_FOUND')
         )
       }
-      return { post }
+      return new PostResource().resource(post, i18n.locale)
     } catch (error) {
       throw error
     }

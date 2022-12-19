@@ -17,7 +17,7 @@ export default class PostController {
 
   public async getAllPosts({ request, i18n, response, params }: HttpContextContract) {
     try {
-      const posts = await this.postService.getAllPosts(params?.page, params?.perPage)
+      const posts = await this.postService.getAllPosts(params?.page, params?.perPage, i18n)
       return new SuccessClass(posts)
     } catch (error) {
       if (error instanceof ResourceNotFoundException || error instanceof ErrorException) {

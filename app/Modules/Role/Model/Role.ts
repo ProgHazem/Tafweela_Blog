@@ -12,13 +12,25 @@ export default class Role extends BaseModel {
   @column()
   public nameAr: string
 
-  @column.dateTime({ serializeAs: null})
+  @column.dateTime({
+    serializeAs: null,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public deletedAt: DateTime
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    consume: (value) => {
+      return DateTime.fromJSDate(value).toLocaleString()
+    },
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    autoCreate: true,
+    autoUpdate: true,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public updatedAt: DateTime
 
   @hasMany(() => User)

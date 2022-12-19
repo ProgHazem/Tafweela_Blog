@@ -8,14 +8,11 @@ export default class PostRepository implements PostRepositoryContract {
   private model = Post
   constructor() {}
   public async getAll(page: number, perPage: number): Promise<Post[] | null> {
-    return await this.model.query().paginate(page, perPage)
+    return await this.model.query().preload('user').paginate(page, perPage)
   }
   public async findOne(id: number) {
-    try {
-      return await this.model.find(id)
-    } catch (e) {
-      throw e
-    }
+    // @ts-ignore
+    return await this.model.query().preload('user').whereColumn('id', '=', id).first()
   }
   public async create(data: BodyBlog): Promise<Post> {
     return await this.model.create(data)

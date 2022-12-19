@@ -24,13 +24,23 @@ export default class User extends AppBaseModel {
   @column()
   public roleId: number
 
-  @column.dateTime()
+  @column.dateTime({
+    serializeAs: null,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public deletedAt?: DateTime | null
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    autoCreate: true,
+    autoUpdate: true,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public updatedAt: DateTime
 
   @beforeSave()

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from 'App/Modules/Auth/Model/User'
 import AppBaseModel from 'App/Models/AppBaseModel'
 import Application from '@ioc:Adonis/Core/Application'
@@ -15,22 +15,32 @@ export default class Post extends AppBaseModel {
   public body: string
 
   @column({
-    serialize: (value) => Application.publicPath(`./uploads/posts/${value}`),
+    consume: (value) => Application.publicPath(`./uploads/posts/${value}`),
   })
   public cover: string
 
   @column()
   public userId: number
 
-  @column.dateTime()
+  @column.dateTime({
+    serializeAs: null,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public deletedAt?: DateTime | null
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    autoCreate: true,
+    autoUpdate: true,
+    consume: (value) => DateTime.fromJSDate(value).toLocaleString(),
+  })
   public updatedAt: DateTime
 
-  @hasOne(() => User)
-  public user: HasOne<typeof User>
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }
