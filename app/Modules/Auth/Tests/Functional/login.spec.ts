@@ -1,5 +1,4 @@
 import { test } from '@japa/runner'
-import User from 'App/Modules/Auth/Model/User'
 import HttpStatusCode from 'App/Modules/Sheard/Enums/http-status-code.enum'
 
 test.group('Auth Login Failure Scenario', () => {
@@ -40,7 +39,6 @@ test.group('Auth Login Failure Scenario', () => {
   })
 
   test('Invalid Credentials', async ({ client }) => {
-    await User.create({ userName: 'Hazem', email: 'hazem@gmail.com', password: 'Hazem@123' })
     const response = await client
       .post('/api/v1/auth/login')
       .form({ email: 'hazem@gmail.com', password: 'Hazem@1234' })
@@ -55,6 +53,6 @@ test.group('Auth Login Success Scenario', () => {
       .post('/api/v1/auth/login')
       .form({ email: 'hazem@gmail.com', password: 'Hazem@123' })
     response.assertStatus(HttpStatusCode.OK)
-    response.assertTextIncludes('{"data":{"user":')
+    response.assertTextIncludes('{"data":{"type":"users"')
   })
 })

@@ -68,6 +68,6 @@ test.group('Auth Register Success Scenario', () => {
       passwordConfirmation: 'Ali@1234',
     })
     response.assertStatus(HttpStatusCode.OK)
-    response.assertTextIncludes('{"data":{"user":')
+    response.assertTextIncludes('{"data":{"type":"users"')
   })
 })

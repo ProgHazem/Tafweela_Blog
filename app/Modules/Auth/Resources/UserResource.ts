@@ -14,7 +14,7 @@ export default class UserResource extends BaseResource {
           updatedAt: row.updatedAt,
         },
         relationships: {
-          role: new TinyRoleResource().resource(row.$preloaded.role.$attributes, lang),
+          role: new TinyRoleResource().resource(row.$preloaded.role?.$attributes, lang),
         },
       }
       if (token !== null) {

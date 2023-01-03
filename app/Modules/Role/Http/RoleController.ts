@@ -16,7 +16,7 @@ export default class RoleController {
   public async index({ request, response, i18n, params }: HttpContextContract) {
     try {
       const roles = await this.roleService.getAllRoles(params?.page, params?.perPage, i18n)
-      return new SuccessClass(roles)
+      return new SuccessClass(roles.data)
     } catch (error) {
       if (error instanceof ResourceNotFoundException || error instanceof ErrorException) {
         return response
@@ -111,10 +111,10 @@ export default class RoleController {
           this.errorValidation.push(error.message)
         )
         return response
-          .status(400)
+          .status(error.status)
           .send(
             new ErrorClass(
-              400,
+              error.status,
               this.errorValidation,
               i18n.formatMessage('exceptions.general.E_VALIDATION_ERROR'),
               request.url()

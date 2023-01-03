@@ -17,18 +17,20 @@ test.group('Auth Refresh Token Failure Scenario', () => {
   })
 })
 
-test.group('Auth Logout Success Scenario', () => {
-  test('Success Register', async ({ client }) => {
-    const { response } = await client.post('/api/v1/auth/register').form({
-      userName: 'Abdo',
+test.group('Auth Logout Success Scenario', (group) => {
+  let loginResponse
+  group.each.setup(async ({ context }) => {
+    const { response } = await context.client.post('/api/v1/auth/login').form({
       email: 'Abdo@gmail.com',
-      password: 'Abdo@1234',
-      passwordConfirmation: 'Abdo@1234',
+      password: 'Abdo@123',
     })
-    const responseRefreshToken = await client.delete('/api/v1/auth/logout').headers({
-      Authorization: `${response?.body?.data?.token?.type} ${response?.body?.data?.token?.token}`,
+    loginResponse = response
+  })
+  test('Success LogOut', async ({ client }) => {
+    const responseLogOut = await client.delete('/api/v1/auth/logout').headers({
+      Authorization: `${loginResponse?.body?.data?.token?.type} ${loginResponse?.body?.data?.token?.accessToken}`,
     })
-    responseRefreshToken.assertStatus(HttpStatusCode.OK)
-    responseRefreshToken.assertTextIncludes('Logout successfully')
+    responseLogOut.assertStatus(HttpStatusCode.OK)
+    responseLogOut.assertTextIncludes('Logout successfully')
   })
 })

@@ -12,5 +12,13 @@ export default class extends BaseSeeder {
         roleId: 1,
       }
     )
+    await User.updateOrCreate(
+      { email: 'hazem@gmail.com' },
+      { userName: 'Hazem', email: 'hazem@gmail.com', password: 'Hazem@123', roleId: 2 }
+    )
+    await User.updateOrCreate(
+      { email: 'Abdo@gmail.com' },
+      { userName: 'Abdo', email: 'Abdo@gmail.com', password: 'Abdo@123', roleId: 2 }
+    )
   }
 }

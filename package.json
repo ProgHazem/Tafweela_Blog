@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "test": "node ace test",
+    "coverage": "c8 node ace test",
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
@@ -44,6 +45,7 @@
     "@types/proxy-addr": "^2.0.0",
     "@types/source-map-support": "^0.5.6",
     "adonis-preset-ts": "^2.1.0",
+    "c8": "^7.12.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-adonis": "^2.1.1",
